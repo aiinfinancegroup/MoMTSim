@@ -14,9 +14,9 @@ Our paper: **Scenario-based Synthetic Dataset Generation for Mobile Money Transa
 
 ## Requirements
 
-A JDK environment is need to start using/contributing to this project.
+A JDK environment is needed to start using/contributing to this project.
 
-- Get and [install](https://adoptopenjdk.net) a recent JDK 11 instance for your platform.
+- Get and [install](https://adoptopenjdk.net) a recent JDK 11 instance for your platform
 - Clone this repository
 - Install a copy of [Apache Maven](https://maven.apache.org/download.cgi) for your operating system
 - That's all you need
