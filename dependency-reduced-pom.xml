@@ -27,7 +27,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>org.momtsim.OriginalMoMTSim</mainClass>
+              <mainClass>org.momtsim.MoMTSimApp</mainClass>
             </manifest>
           </archive>
         </configuration>

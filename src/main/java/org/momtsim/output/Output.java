@@ -1,6 +1,6 @@
 package org.momtsim.output;
 
-import org.momtsim.OriginalMoMTSim;
+import org.momtsim.MoMTSimApp;
 import org.momtsim.actors.SuperActor;
 import org.momtsim.base.ClientActionProfile;
 import org.momtsim.base.StepActionProfile;
@@ -115,7 +115,7 @@ public class Output {
         }
     }
 
-    public static void writeSummarySimulation(OriginalMoMTSim momtSim) {
+    public static void writeSummarySimulation(MoMTSimApp momtSim) {
 
         StringBuilder errorSummary = new StringBuilder();
         Parameters parameters = momtSim.getParameters();

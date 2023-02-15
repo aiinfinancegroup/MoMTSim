@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OriginalMoMTSim extends MoMTSimState {
+public class MoMTSimApp extends MoMTSimState {
 
     private static final String[] DEFAULT_ARGS = new String[]{"", "-file", "MoMTSim.properties", "1"};
 
@@ -36,12 +36,12 @@ public class OriginalMoMTSim extends MoMTSimState {
         }
         Parameters parameters = new Parameters(propertiesFile);
         for (int i = 0; i < nbTimesRepeat; i++) {
-            OriginalMoMTSim p = new OriginalMoMTSim(parameters);
+            MoMTSimApp p = new MoMTSimApp(parameters);
             p.run();
         }
     }
 
-    public OriginalMoMTSim(Parameters parameters) {
+    public MoMTSimApp(Parameters parameters) {
         super(parameters);
 
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
