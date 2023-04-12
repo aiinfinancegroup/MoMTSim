@@ -46,7 +46,7 @@ public class MoMTSimApp extends MoMTSimState {
 
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         Date currentTime = new Date();
-        simulationName = "SD_" + dateFormat.format(currentTime) + "_" + seed();
+        simulationName = "MoMTSim_" + dateFormat.format(currentTime) + "_" + seed();
 
         File simulationFolder = new File(parameters.outputPath + simulationName);
         simulationFolder.mkdirs();
