@@ -102,39 +102,51 @@ public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity
 
     @Override
     public void step(SimState state) {
+        // Cast the SimState object to MoMTSimState
         MoMTSimState paysim = (MoMTSimState) state;
+        // Create a list to store the transactions
         ArrayList<Transaction> transactions = new ArrayList<>();
+        // Get the current step count from the simulation state
         int step = (int) state.schedule.getSteps();
 
+        // Check if the fraud probability is met
         if (paysim.getRNG().nextDouble() < parameters.thirdPartyFraudProbability) {
+            // Select a random client and a random merchant
             Client c = pickTargetClient(paysim);
             Merchant m = pickTestMerchant(paysim);
 
+            // Determine the payment amount based on the client's profile and action type
             final double paymentAmount = pickTestChargeAmount(paysim, c, Client.PAYMENT);
+            // Create a payment transaction between the client and merchant
             Transaction payment = c.handlePayment(m, step, paymentAmount);
+            // Add the payment transaction to the transactions list
             transactions.add(payment);
 
+            // Check if the payment transaction was successful
             if (payment.isSuccessful()) {
+                // Determine the transfer amount based on the client's profile and action type
                 double transferAmount = pickTestChargeAmount(paysim, c, Client.TRANSFER);
+                // Create a transfer transaction between the client and the mule
                 Transaction transfer = c.handleTransfer(this.mule, step, transferAmount);
 
+                // Randomly set the transfer transaction as fraudulent with a 30% chance
                 if (paysim.getRNG().nextBoolean(0.3)) {
                     transfer.setFraud(true);
                 }
 
+                // Add the transfer transaction to the transactions list
                 transactions.add(transfer);
             }
         }
 
+        // With a 30% chance, attempt a fraudulent cash-out from the mule account
         if (paysim.getRNG().nextBoolean(0.3)) {
             mule.fraudulentCashOut(paysim, step);
         }
 
+        // Pass the transactions to the simulation for further processing
         paysim.onTransactions(transactions);
     }
-
-
-
 
     @Override
     public String toString() {
