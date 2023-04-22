@@ -102,6 +102,10 @@ public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity
         ArrayList<Transaction> transactions = new ArrayList<>();
         int step = (int) state.schedule.getSteps();
 
+
+
+
+//Implement a new logic for any specific fraudulent behaviour
         // XXX: Core 3rd Party Fraud Logic
         if (paysim.getRNG().nextDouble() < parameters.thirdPartyFraudProbability) {
             if (victims.isEmpty() || paysim.getRNG().nextBoolean(parameters.thirdPartyNewVictimProbability)) {
@@ -140,6 +144,9 @@ public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity
         }
         paysim.onTransactions(transactions);
     }
+//End of changes
+
+
 
     @Override
     public String toString() {
