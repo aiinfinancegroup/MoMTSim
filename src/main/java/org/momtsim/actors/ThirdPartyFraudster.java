@@ -147,7 +147,7 @@ public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity
         // Pass the transactions to the simulation for further processing
         paysim.onTransactions(transactions);
     }
-
+    
     @Override
     public String toString() {
         ArrayList<String> properties = new ArrayList<>();
