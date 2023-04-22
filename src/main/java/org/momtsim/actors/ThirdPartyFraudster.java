@@ -104,7 +104,7 @@ public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity
 
          //Implement a new logic for any specific fraudulent behaviour
         // XXX: Core 3rd Party Fraud Logic
-        // This is a Demo
+        // This is a Demo, this is not a significant fraud scheme in Sub-Saharan Africa
         if (paysim.getRNG().nextDouble() < parameters.thirdPartyFraudProbability) {
             if (victims.isEmpty() || paysim.getRNG().nextBoolean(parameters.thirdPartyNewVictimProbability)) {
                 // Time to find a new lucky victim
