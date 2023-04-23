@@ -12,9 +12,10 @@ import sim.engine.Steppable;
 
 import java.util.*;
 
-//Money laundering schemes but not very useful in the SSA Context
 /**
- * Hi, I'm Theo...the 3rd Party Fraudster. I like to acquire your account creds and steal your cash/credit.
+ * Hi all, ...this is a version of 3rd Party Fraudster tailored to split deposit fraud in MMTs from SSA.
+ * This implements the Split Agent Deposit fraud scenario for MMTs in SSA
+ * Core logic or fraudulent behaviour in the split agent deposit is found in the step method
  */
 public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity, Identifiable, Steppable {
     private double profit = 0;
@@ -104,7 +105,6 @@ public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity
         ArrayList<Transaction> transactions = new ArrayList<>();
         int step = (int) state.schedule.getSteps();
 
-        // Implement a new logic for any specific fraudulent behaviour
         // Cash-In Fraud Logic
         if (paysim.getRNG().nextDouble() < parameters.thirdPartyFraudProbability) {
             // Choose a random favored merchant or a random merchant from the simulation
