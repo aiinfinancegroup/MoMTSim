@@ -12,9 +12,10 @@ import sim.engine.Steppable;
 
 import java.util.*;
 
-//Money laundering schemes but not very useful in the SSA Context
 /**
- * Hi, I'm Theo...the 3rd Party Fraudster. I like to acquire your account creds and steal your cash/credit.
+ * Hi all, ...this is a version of 3rd Party Fraudster tailored to refund fraud in MMTs from SSA.
+ * This implements the most common Refund fraud scenario for MMTs in SSA
+ * Core logic or fraudulent behaviour in the refund fraud is found in the step method below
  */
 public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity, Identifiable, Steppable {
     private double profit = 0;
