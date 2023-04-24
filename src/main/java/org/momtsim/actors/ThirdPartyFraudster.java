@@ -12,9 +12,9 @@ import sim.engine.Steppable;
 
 import java.util.*;
 
-//Money laundering schemes but not very useful in the SSA Context
+
 /**
- * Hi, I'm Theo...the 3rd Party Fraudster. I like to acquire your account creds and steal your cash/credit.
+ * Hi all, I'm Theo...the 3rd Party Fraudster. This code implements the direct deposit fraudulent scheme in MMTs
  */
 public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity, Identifiable, Steppable {
     private double profit = 0;
@@ -95,7 +95,7 @@ public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity
     public Type getType() {
         return Type.THIRD_PARTY_FRAUDSTER;
     }
-
+//Core logic for Direct deposit fraudelent activity in MMTs
 
     @Override
     public void step(SimState state) {
