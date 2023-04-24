@@ -96,53 +96,41 @@ public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity
         return Type.THIRD_PARTY_FRAUDSTER;
     }
 
+
     @Override
     public void step(SimState state) {
         MoMTSimState paysim = (MoMTSimState) state;
         ArrayList<Transaction> transactions = new ArrayList<>();
         int step = (int) state.schedule.getSteps();
 
-         //Implement a new logic for any specific fraudulent behaviour
-        // XXX: Core 3rd Party Fraud Logic
-        // This is a Demo, this is not a significant fraud scheme in Sub-Saharan Africa
+        // Implement new fraudulent behavior
         if (paysim.getRNG().nextDouble() < parameters.thirdPartyFraudProbability) {
-            if (victims.isEmpty() || paysim.getRNG().nextBoolean(parameters.thirdPartyNewVictimProbability)) {
-                // Time to find a new lucky victim
-                Client c = pickTargetClient(paysim);
-                Merchant m = pickTestMerchant(paysim);
-                final double testChargeAmt = pickTestChargeAmount(paysim, c, Client.PAYMENT);
-                Transaction testCharge = c.handlePayment(m, step, testChargeAmt);
-                testCharge.setFraud(true);
+            // Pick a target client and a merchant
+            Client targetClient = pickTargetClient(paysim);
+            Merchant selectedMerchant = pickTestMerchant(paysim);
 
-                if (testCharge.isSuccessful()) {
-                    victims.add(c);
-                    transactions.add(testCharge);
-                    Transaction xfer = c.handleTransfer(mule, step, pickTestChargeAmount(paysim, c, Client.TRANSFER));
-                    xfer.setFraud(true);
-                    if (xfer.isSuccessful()) {
-                        transactions.add(xfer);
-                    }
-                }
-            } else {
-                // Repeat attack on a victim
-                pickRepeatVictim(paysim).ifPresent(c -> {
-                    Transaction xfer = c.handleTransfer(mule, step, pickTestChargeAmount(paysim, c, Client.TRANSFER));
-                    xfer.setFraud(true);
-                    if (xfer.isSuccessful()) {
-                        transactions.add(xfer);
-                    }
-                });
+            // Calculate the deposit amount using CASH-IN transaction type
+            double depositAmount = pickTestChargeAmount(paysim, targetClient, Client.CASH_IN);
+
+            // Make a deposit into the target client's account via the selected merchant
+            Transaction deposit = targetClient.handleCashIn(selectedMerchant, step, depositAmount);
+
+            // If the random number generated is less than 0.3, label the transaction as fraudulent
+            if (paysim.getRNG().nextDouble() < 0.3) {
+                deposit.setFraud(true);
             }
+            // Add the transaction to the list of transactions
+            transactions.add(deposit);
         }
-
-        // Right now, we need to always check our Mule accounts to see if we want to cash them out. Mules
-        // are brainless because they're unscheduled actors
+        // Check mule account for possible cash-outs
         if (paysim.getRNG().nextBoolean(0.3)) {
             mule.fraudulentCashOut(paysim, step);
         }
+
+        // Inform the simulation about the transactions
         paysim.onTransactions(transactions);
     }
-//End of changes
+
 
     @Override
     public String toString() {
