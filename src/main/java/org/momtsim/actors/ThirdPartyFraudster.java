@@ -95,7 +95,8 @@ public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity
     public Type getType() {
         return Type.THIRD_PARTY_FRAUDSTER;
     }
-//Core logic for Direct deposit fraudelent activity in MMTs
+
+    //Core logic for Direct deposit fraudelent activity in MMTs
 
     @Override
     public void step(SimState state) {
