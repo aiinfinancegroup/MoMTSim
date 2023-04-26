@@ -27,7 +27,7 @@ public class Output {
     private static final Logger logger = LoggerFactory.getLogger(Output.class);
 
     public static void incrementalWriteRawLog(long step, List<Transaction> transactions) {
-        String rawLogHeader = "step,action,amount,nameOrig,oldBalanceOrig,newBalanceOrig,nameDest,oldBalanceDest,newBalanceDest,isFraud,isFlaggedFraud,isUnauthorizedOverdraft";
+        String rawLogHeader = "step,action,amount,nameOrig,oldBalanceOrig,newBalanceOrig,nameDest,oldBalanceDest,newBalanceDest,isFraud";
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(filenameRawLog, true));
             if (step == 0) {
