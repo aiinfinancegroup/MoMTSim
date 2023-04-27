@@ -136,7 +136,7 @@ public class SplitDepositFraudster extends SuperActor implements HasClientIdenti
         momtsim.onTransactions(transactions);
     }
 
-    
+
     @Override
     public String toString() {
         ArrayList<String> properties = new ArrayList<>();
