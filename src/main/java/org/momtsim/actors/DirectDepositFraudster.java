@@ -14,16 +14,17 @@ import java.util.*;
 
 
 /**
- * Hi all, I'm Theo...the 3rd Party Fraudster. This code implements the direct deposit fraudulent scheme in MMTs
+ * Hi all, ...the Fraudster committing direct deposits on mobile money platforms.
+ * In other words, this code implements the direct deposit fraudulent scheme in MMTs
  */
-public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity, Identifiable, Steppable {
+public class DirectDepositFraudster extends SuperActor implements HasClientIdentity, Identifiable, Steppable {
     private double profit = 0;
     private final ClientIdentity identity;
     private final Mule mule;
     private final Set<Client> victims;
     private final Set<Merchant> favoredMerchants;
 
-    public ThirdPartyFraudster(MoMTSimState state, ClientIdentity identity) {
+    public DirectDepositFraudster(MoMTSimState state, ClientIdentity identity) {
         super(state);
         this.identity = identity;
         victims = new HashSet<>();
@@ -96,40 +97,41 @@ public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity
         return Type.THIRD_PARTY_FRAUDSTER;
     }
 
-    //Core logic for Direct deposit fraudelent activity in MMTs
+    //Core logic for Direct deposit fraudulent activity in MMTs
+    //Behaviour of a fraudster performing direct deposits in mobile money txns
 
     @Override
     public void step(SimState state) {
-        MoMTSimState paysim = (MoMTSimState) state;
+        MoMTSimState momtsim = (MoMTSimState) state;
         ArrayList<Transaction> transactions = new ArrayList<>();
         int step = (int) state.schedule.getSteps();
 
-        // Implement new fraudulent behavior
-        if (paysim.getRNG().nextDouble() < parameters.thirdPartyFraudProbability) {
+        // Implement new fraudulent behavior of direct deposit
+        if (momtsim.getRNG().nextDouble() < parameters.thirdPartyFraudProbability) {
             // Pick a target client and a merchant
-            Client targetClient = pickTargetClient(paysim);
-            Merchant selectedMerchant = pickTestMerchant(paysim);
+            Client targetClient = pickTargetClient(momtsim);
+            Merchant selectedMerchant = pickTestMerchant(momtsim);
 
             // Calculate the deposit amount using CASH-IN transaction type
-            double depositAmount = pickTestChargeAmount(paysim, targetClient, Client.CASH_IN);
+            double depositAmount = pickTestChargeAmount(momtsim, targetClient, Client.CASH_IN);
 
             // Make a deposit into the target client's account via the selected merchant
             Transaction deposit = targetClient.handleCashIn(selectedMerchant, step, depositAmount);
 
             // If the random number generated is less than 0.3, label the transaction as fraudulent
-            if (paysim.getRNG().nextDouble() < 0.3) {
+            if (momtsim.getRNG().nextDouble() < 0.3) {
                 deposit.setFraud(true);
             }
             // Add the transaction to the list of transactions
             transactions.add(deposit);
         }
         // Check mule account for possible cash-outs
-        if (paysim.getRNG().nextBoolean(0.3)) {
-            mule.fraudulentCashOut(paysim, step);
+        if (momtsim.getRNG().nextBoolean(0.3)) {
+            mule.fraudulentCashOut(momtsim, step);
         }
 
         // Inform the simulation about the transactions
-        paysim.onTransactions(transactions);
+        momtsim.onTransactions(transactions);
     }
 
 
