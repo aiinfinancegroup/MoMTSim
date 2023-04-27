@@ -109,7 +109,7 @@ public abstract class MoMTSimState extends SimState {
         final int num3rdPartyFraudsters = numFraudsters / 2;
         for (int i = 0; i < num3rdPartyFraudsters; i++) {
             ClientIdentity identity = idFactory.nextPerson();
-            ThirdPartyFraudster f = new ThirdPartyFraudster(this, idFactory.nextPerson());
+            SplitDepositFraudster f = new SplitDepositFraudster(this, idFactory.nextPerson());
 
             // 3rd Party Fraudsters select some "favorites" of the high-risk merchants. A Fraudster will have
             // some probability of targeting clients that used these merchants. The remaining events are random
