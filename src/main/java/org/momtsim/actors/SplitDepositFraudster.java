@@ -92,7 +92,9 @@ public class SplitDepositFraudster extends SuperActor implements HasClientIdenti
         return Optional.empty();
     }
 
+
     @Override
+
     public Type getType() {
         return Type.THIRD_PARTY_FRAUDSTER;
     }
