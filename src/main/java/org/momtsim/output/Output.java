@@ -192,7 +192,7 @@ public class Output {
         String outputBaseString = outputPath + simulatorName + "//" + simulatorName;
         filenameGlobalSummary = outputPath + "summary.csv";
 
-        filenameParameters = outputBaseString + "_PaySim.properties";
+        filenameParameters = outputBaseString + "_MoMTSim.properties";
         filenameSummary = outputBaseString + "_Summary.txt";
 
         filenameRawLog = outputBaseString + "_rawLog.csv";
