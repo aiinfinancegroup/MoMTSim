@@ -98,50 +98,51 @@ public class ThirdPartyFraudster extends SuperActor implements HasClientIdentity
 
     @Override
     public void step(SimState state) {
-        MoMTSimState paysim = (MoMTSimState) state;
+        // Cast the SimState object to MoMTSimState
+        MoMTSimState momtsim = (MoMTSimState) state;
+        // Create a list to store the transactions
         ArrayList<Transaction> transactions = new ArrayList<>();
+        // Get the current step count from the simulation state
         int step = (int) state.schedule.getSteps();
 
-         //Implement a new logic for any specific fraudulent behaviour
-        // XXX: Core 3rd Party Fraud Logic
-        // This is a Demo, this is not a significant fraud scheme in Sub-Saharan Africa
-        if (paysim.getRNG().nextDouble() < parameters.thirdPartyFraudProbability) {
-            if (victims.isEmpty() || paysim.getRNG().nextBoolean(parameters.thirdPartyNewVictimProbability)) {
-                // Time to find a new lucky victim
-                Client c = pickTargetClient(paysim);
-                Merchant m = pickTestMerchant(paysim);
-                final double testChargeAmt = pickTestChargeAmount(paysim, c, Client.PAYMENT);
-                Transaction testCharge = c.handlePayment(m, step, testChargeAmt);
-                testCharge.setFraud(true);
+        // Check if the fraud probability is met
+        if (momtsim.getRNG().nextDouble() < parameters.thirdPartyFraudProbability) {
+            // Select a random client and a random merchant
+            Client c = pickTargetClient(momtsim);
+            Merchant m = pickTestMerchant(momtsim);
 
-                if (testCharge.isSuccessful()) {
-                    victims.add(c);
-                    transactions.add(testCharge);
-                    Transaction xfer = c.handleTransfer(mule, step, pickTestChargeAmount(paysim, c, Client.TRANSFER));
-                    xfer.setFraud(true);
-                    if (xfer.isSuccessful()) {
-                        transactions.add(xfer);
-                    }
+            // Determine the payment amount based on the client's profile and action type
+            final double paymentAmount = pickTestChargeAmount(momtsim, c, Client.PAYMENT);
+            // Create a payment transaction between the client and merchant
+            Transaction payment = c.handlePayment(m, step, paymentAmount);
+            // Add the payment transaction to the transactions list
+            transactions.add(payment);
+
+            // Check if the payment transaction was successful
+            if (payment.isSuccessful()) {
+                // Determine the transfer amount based on the client's profile and action type
+                double transferAmount = pickTestChargeAmount(momtsim, c, Client.TRANSFER);
+                // Create a transfer transaction between the client and the mule
+                Transaction transfer = c.handleTransfer(this.mule, step, transferAmount);
+
+                // Randomly set the transfer transaction as fraudulent with a 30% chance
+                if (momtsim.getRNG().nextBoolean(0.3)) {
+                    transfer.setFraud(true);
                 }
-            } else {
-                // Repeat attack on a victim
-                pickRepeatVictim(paysim).ifPresent(c -> {
-                    Transaction xfer = c.handleTransfer(mule, step, pickTestChargeAmount(paysim, c, Client.TRANSFER));
-                    xfer.setFraud(true);
-                    if (xfer.isSuccessful()) {
-                        transactions.add(xfer);
-                    }
-                });
+
+                // Add the transfer transaction to the transactions list
+                transactions.add(transfer);
             }
         }
 
-        // Right now, we need to always check our Mule accounts to see if we want to cash them out. Mules
-        // are brainless because they're unscheduled actors
-        if (paysim.getRNG().nextBoolean(0.3)) {
-            mule.fraudulentCashOut(paysim, step);
+        // With a 30% chance, attempt a fraudulent cash-out from the mule account
+        if (momtsim.getRNG().nextBoolean(0.3)) {
+            mule.fraudulentCashOut(momtsim, step);
         }
-        paysim.onTransactions(transactions);
+        // Pass the transactions to the simulation for further processing
+        momtsim.onTransactions(transactions);
     }
+
 //End of changes
 
     @Override
